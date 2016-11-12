@@ -1,1 +1,1 @@
-# custom-hibernate-validator
+# Example of custom Hibernate Validator
