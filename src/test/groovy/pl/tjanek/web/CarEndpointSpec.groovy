@@ -1,7 +1,9 @@
 package pl.tjanek.web
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.jayway.restassured.RestAssured
 import com.jayway.restassured.parsing.Parser
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
@@ -13,6 +15,9 @@ import static com.jayway.restassured.RestAssured.given
 @ContextConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "server.port=8080")
 class CarEndpointSpec extends Specification {
+
+    @Autowired
+    ObjectMapper jsonMapper;
 
     def setup() {
         RestAssured.port = 8080
@@ -26,9 +31,10 @@ class CarEndpointSpec extends Specification {
         car.model.year = model_year
 
         when:
+        def json = jsonMapper.writeValueAsString(car)
         def response = given()
                 .contentType("application/json;charset=UTF-8")
-                .body(car)
+                .body(json)
                 .when()
                 .post('car')
                 .thenReturn()
@@ -49,9 +55,10 @@ class CarEndpointSpec extends Specification {
         car.model.year = model_year
 
         when:
+        def json = jsonMapper.writeValueAsString(car)
         def response = given()
                 .contentType("application/json;charset=UTF-8")
-                .body(car)
+                .body(json)
                 .when()
                 .post('car')
                 .thenReturn()
