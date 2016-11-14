@@ -6,6 +6,8 @@ import com.jayway.restassured.parsing.Parser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
+import pl.tjanek.web.test.IdentityDocumentJson
+import pl.tjanek.web.test.IdentityDocumentType
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -53,6 +55,10 @@ class CarEndpointSpec extends Specification {
         def car = aCar()
         car.model.name = model_name
         car.model.year = model_year
+        car.mainDocument = new IdentityDocumentJson();
+        car.mainDocument.identityDocumentType = IdentityDocumentType.ID_CARD
+        car.additionalDocument = new IdentityDocumentJson();
+        car.additionalDocument.identityDocumentType = IdentityDocumentType.ID_CARD
 
         when:
         def json = jsonMapper.writeValueAsString(car)
