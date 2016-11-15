@@ -5,6 +5,7 @@ import pl.tjanek.validation.ValidCarModelName;
 import pl.tjanek.validation.ValidCarModelYear;
 import pl.tjanek.web.test.IdentityDocumentJson;
 import pl.tjanek.web.test.ValidIdentityDocument;
+import pl.tjanek.web.test.impl.validators.IdentityDocumentsRequired;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,16 +15,19 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.DEFAULT
 @ValidCarModelYear
 @ValidCarModelName
 @JsonAutoDetect(fieldVisibility = DEFAULT)
+@IdentityDocumentsRequired
 public class CarJson implements Serializable {
 
     private LocalDate registrationDate;
 
     private CarModelJson model;
 
-    @ValidIdentityDocument
+    private String pesel;
+
+    //@ValidIdentityDocument
     private IdentityDocumentJson mainDocument;
 
-    @ValidIdentityDocument
+    //@ValidIdentityDocument
     private IdentityDocumentJson additionalDocument;
 
     public CarJson() {
@@ -32,6 +36,14 @@ public class CarJson implements Serializable {
     public CarJson(LocalDate registrationDate, CarModelJson model) {
         this.registrationDate = registrationDate;
         this.model = model;
+    }
+
+    public String getPesel() {
+        return pesel;
+    }
+
+    public void setPesel(String pesel) {
+        this.pesel = pesel;
     }
 
     public int modelYear() {

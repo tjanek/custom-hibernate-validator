@@ -81,6 +81,29 @@ class CarEndpointSpec extends Specification {
         'Only Nissan cars are allowed to create'              | 'model.name' | 422         | 'Mazda'    | 2016
     }
 
+    def "Should fail when create without required fields"() {
+        given:
+        def car = aCar()
+        //car.mainDocument = new IdentityDocumentJson()
+        //car.mainDocument.identityDocumentType = IdentityDocumentType.ID_CARD
+        car.additionalDocument = new IdentityDocumentJson();
+        car.additionalDocument.identityDocumentType = IdentityDocumentType.ID_CARD
+
+        when:
+        def json = jsonMapper.writeValueAsString(car)
+        def response = given()
+                .contentType("application/json;charset=UTF-8")
+                .body(json)
+                .when()
+                .post('car')
+                .thenReturn()
+
+        then:
+        response.statusCode == 422
+        def validation = response.as(ValidationMessages)
+        validation.messages.empty == false
+    }
+
     private CarJson aCar() {
         new CarJson(LocalDate.of(2016, 10, 01), new CarModelJson())
     }
